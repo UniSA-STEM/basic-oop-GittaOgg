@@ -20,8 +20,17 @@ class Asset():
         else:
             return f'**********\n<{self.name}>: <{self.description}>\n**********\n'
 
+    def encrypt(self):
+        if self.encrypted==True:
+            print(f'{self.name} is already encrypted')
+        else:
+            self.encrypted = True
+
+    def decrypt(self):
+        if self.encrypted==False:
+            print(f'{self.name} is not encrypted')
+        else:
+            self.encrypted = False
 
 
 
-spike1 = Asset("DataSpike", "data spike", True)
-print(spike1)
