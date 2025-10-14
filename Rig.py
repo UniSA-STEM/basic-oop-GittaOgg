@@ -37,3 +37,35 @@ class Rig:
 
 
 
+    def get_name(self):
+        return self.name
+
+    def get_upgrade_level(self):
+        return self.upgrade_level
+
+    def get_damage_value(self):
+        return self.damage_value
+
+    def get_max_assets(self):
+        return self.max_assets
+
+    def get_condition(self):
+        return self.condition
+
+    def get_damage_counter(self):
+        return self.damage_counter
+
+    def get_removable_drive(self):
+        return self.removable_drive
+
+    def add_to_drive(self, asset):
+        if len(self.removable_drive)  >= self.max_assets:
+            print('Rig has full removable drive')
+        else:
+            self.removable_drive.append(asset)
+
+    def remove_from_drive(self, asset):
+        if asset in self.removable_drive:
+            self.removable_drive.remove(asset)
+        else:
+            print(f'There are no {asset}\'s in {self.name}\'s removable drive')
