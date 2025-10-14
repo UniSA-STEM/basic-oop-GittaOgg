@@ -8,6 +8,7 @@ This is my own work as defined by the University's Academic Misconduct Policy.
 """
 
 import Rig
+import Asset
 
 
 class Hacker:
@@ -17,7 +18,7 @@ class Hacker:
         self.rig = rig
         self.inventory = inventory
         self.trace_level = trace_level
-        self.inventory.append(Asset('CrytoToken','used for ....'))
+        self.inventory.append(Asset.Asset('CryptoToken','used for ....'))
 
 
 
@@ -30,7 +31,7 @@ class Hacker:
         if self.rig == []:
             rig_str = 'has no rig'
         else:
-            rig_str = f'has a rig called {self.rig}'
+            rig_str = f'has a rig called {self.rig[0].get_name()}'
 
         return (f'**********\nHacker\'s name is {self.name} and has a trace level of {self.trace_level}.'
                 f'\n{self.name} {rig_str}' 
@@ -39,18 +40,54 @@ class Hacker:
 
 
     def AcquireRig(self):
-        for item in self.inventory:
-            if item.get_name() == 'CrytoToken':
-                name = input('Enter the name of your rig: ')
-                self.inventory.remove(item)
-                self.rig.append(Rig(name))
-                break
+        if self.rig != []:
+            print(f'{self.name} already has a rig.')
         else:
-            print('No cryptotokens found')
+            for item in self.inventory:
+                if item.get_name() == 'CryptoToken':
+                    name = input('Enter the name of your rig: ')
+                    self.inventory.remove(item)
+                    self.rig.append(Rig.Rig(name))
+                    break
+            else:
+                print('No cryptotokens found')
+
+
+    def repair_rig(self):
+        if self.rig == []:
+            print('No rig found.')
+        else:
+            if self.rig[0].get_damage_counter()== 0:
+                print('No repair needed')
+            else:
+                for item in self.inventory:
+                    if item.get_name() == 'CryptoToken':
+                        self.rig[0].repair()
+                        self.inventory.remove(item)
+                        break
+                else:
+                    print('No Cryptotokens found')
+
+    def upgrade_rig(self):
+        if self.rig == []:
+            print('No rig found.')
+        else:
+            if self.rig[0].get_upgrade_level() == 3:
+                print('No further upgrades possible')
+            else:
+                for item in self.inventory:
+                    if item.get_name() == 'Hardware Patch':
+                        self.rig[0].upgrade()
+                        self.inventory.remove(item)
+                        break
+                    else:
+                        print('No Hardware Patches found')
 
 
 
-hack1 = Hacker('TestHacker',crypto_token=3)
+
+
+hack1 = Hacker('TestHacker')
 print(hack1)
 hack1.AcquireRig()
 print(hack1)
