@@ -28,13 +28,12 @@ class Rig:
 
 
     def __str__(self):
-        asset_list = '\n'
+        asset_list = '\n*'
         for asset in self.removable_drive:
-            asset_list = asset_list + asset + '\n'
+            asset_list = asset_list + asset + '\n*'
 
-        return f'******************\nRig\'s name is {self.name} and is currently {self.condition} with an upgrade level of {self.upgrade_level}. \n{self.name}\'s removable drive contains: {asset_list}\n******************'
+        return (f'**********\nRig\'s name is {self.name} and is currently {self.condition} with an upgrade level '
+                f'of {self.upgrade_level}. \n{self.name}\'s removable drive contains: {asset_list}**********\n')
 
 
 
-rig1 = Rig('bobby')
-print(rig1)
