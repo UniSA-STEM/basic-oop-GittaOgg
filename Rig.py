@@ -69,3 +69,17 @@ class Rig:
             self.removable_drive.remove(asset)
         else:
             print(f'There are no {asset}\'s in {self.name}\'s removable drive')
+
+
+    def repair(self):
+        if self.damage_counter == 0:
+            print('No repairs necessary')
+        else:
+            self.damage_counter = 0
+            self.condition = 'Pristine'
+
+
+    def upgrade(self):
+        self.max_assets += 1
+        self.damage_value -= 0.25
+        self.upgrade_level += 1
