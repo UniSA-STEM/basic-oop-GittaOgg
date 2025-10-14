@@ -33,4 +33,10 @@ class Asset():
             self.encrypted = False
 
 
+    def get_name(self):
+        return self.name
+
+    def get_encryption(self):
+        return self.encrypted
+
 
