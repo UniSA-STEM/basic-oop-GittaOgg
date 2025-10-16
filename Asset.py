@@ -20,6 +20,10 @@ class Asset():
         else:
             return f'**********\n<{self.name}>: <{self.description}>\n'
 
+    def get_encryption(self):
+        return self.encrypted
+
+
     def encrypt(self):
         if self.encrypted==True:
             print(f'{self.name} is already encrypted')
