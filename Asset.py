@@ -16,9 +16,9 @@ class Asset():
 
     def __str__(self):
         if self.encrypted==True:
-            return f'**********\n<{self.name}>: <{self.description}> [Encrypted]\n**********\n'
+            return f'**********\n<{self.name}>: <{self.description}> [Encrypted]\n'
         else:
-            return f'**********\n<{self.name}>: <{self.description}>\n**********\n'
+            return f'**********\n<{self.name}>: <{self.description}>\n'
 
     def encrypt(self):
         if self.encrypted==True:
