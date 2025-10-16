@@ -6,18 +6,21 @@ ID: 110439590
 Username: hunny006
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
+import Asset
+
+
 class Rig:
 
     def __init__(self, name, damage_counter= 0, upgrade_level = 0, damage_value = 1, max_assets = 5,
-                 removable_drive=None):
+                 removable_drive=[]):
         self.damage_counter = damage_counter
         self.name = name
         self.upgrade_level = upgrade_level
         self.damage_value = damage_value
         self.max_assets = max_assets
         self.removable_drive = removable_drive
-        if self.removable_drive is None:
-            self.removable_drive = ['DataSpike', 'DataSpike']
+        self.removable_drive.append(Asset.Asset('DS1','DataSpike'))
+        self.removable_drive.append(Asset.Asset('DS2','DataSpike'))
         if self.damage_counter == 0:
             self.condition = 'Pristine'
         elif 0 < self.damage_counter < 2:
@@ -69,11 +72,15 @@ class Rig:
     def remove_from_drive(self):
         removing = input('Enter name of asset to retrieve, or enter "All" to retrieve all assets: ')
         if removing == 'All':
+            removal_list = []
             for item in self.removable_drive:
                 self.removable_drive.remove(item)
+                removal_list.append(item)
+                return removal_list
         else:
             if removing in self.removable_drive:
                 self.removable_drive.remove(removing)
+                return removing
             else:
                 print(f'There are no {removing}s in rig\'s removable drive')
 
