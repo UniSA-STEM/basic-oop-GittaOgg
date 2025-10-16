@@ -32,10 +32,12 @@ class Rig:
         for asset in self.removable_drive:
             asset_list = asset_list + asset + '\n*'
 
-        return (f'**********\nRig\'s name is {self.name} and is currently {self.condition} with an upgrade level '
-                f'of {self.upgrade_level}. \n{self.name}\'s removable drive contains: {asset_list}**********\n')
+        return (f'**********\nRig\'s name is {self.name} and is currently {self.condition} ({self.damage_counter})'
+                f' with an upgrade level of {self.upgrade_level}. {self.name} can hold a maximum of {self.max_assets} in '
+                f'the removable drive \n{self.name}\'s removable drive contains: \n{asset_list}**********\n')
 
-
+    def check_condition(self):
+        return f'{self.condition} ({self.damage_counter})'
 
     def get_name(self):
         return self.name
@@ -64,22 +66,26 @@ class Rig:
         else:
             self.removable_drive.append(asset)
 
-    def remove_from_drive(self, asset):
-        if asset in self.removable_drive:
-            self.removable_drive.remove(asset)
+    def remove_from_drive(self):
+        removing = input('Enter name of asset to retrieve, or enter "All" to retrieve all assets: ')
+        if removing == 'All':
+            for item in self.removable_drive:
+                self.removable_drive.remove(item)
         else:
-            print(f'There are no {asset}\'s in {self.name}\'s removable drive')
+            if removing in self.removable_drive:
+                self.removable_drive.remove(removing)
+            else:
+                print(f'There are no {removing}s in rig\'s removable drive')
 
 
     def repair(self):
-        if self.damage_counter == 0:
-            print('No repairs necessary')
-        else:
-            self.damage_counter = 0
-            self.condition = 'Pristine'
+        self.damage_counter = 0
+        self.condition = 'Pristine'
+        return f'{self.name} has been repaired to {self.condition}'
 
 
     def upgrade(self):
         self.max_assets += 1
         self.damage_value -= 0.25
         self.upgrade_level += 1
+
