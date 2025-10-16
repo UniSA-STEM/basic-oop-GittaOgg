@@ -18,7 +18,7 @@ class Hacker:
         self.rig = rig
         self.inventory = inventory
         self.trace_level = trace_level
-        self.inventory.append(Asset.Asset('CryptoToken','used for acquiring or repairing rigs'))
+        self.inventory.append(Asset.Asset('CT1','CryptoToken'))
 
 
 
@@ -44,7 +44,7 @@ class Hacker:
             print(f'{self.name} already has a rig.')
         else:
             for item in self.inventory:
-                if item.get_name() == 'CryptoToken':
+                if item.get_description() == 'CryptoToken':
                     name = input('Enter the name of your rig: ')
                     self.inventory.remove(item)
                     self.rig.append(Rig.Rig(name))
@@ -131,6 +131,7 @@ class Hacker:
                     for item in self.inventory:
                         self.inventory.remove(item)
                         self.rig[0].add_to_drive(storing)
+                        self.trace_level += 1
                     print('All assets have been stored in rig\'s drive')
             else:
                 for item in self.inventory:
@@ -138,17 +139,17 @@ class Hacker:
                         self.inventory.remove(item)
                         self.rig[0].add_to_drive(asset)
                         print(f'{item.get_name()} has been stored in Rig\'s removable drive.')
+                        self.trace_level += 1
                         break
 
-    def retrieve_asset(self,asset):
+    def retrieve_asset(self):
         if self.trace_level >= 5:
             print(f'Trace level is at {self.trace_level}. Cannot transfer assets.')
         else:
-            for item in self.inventory:
-                if item.get_name() == asset:
-                    self.rig[0].remove_from_drive(asset)
+            if type(self.rig[0].remove_from_drive()) == list:
+                for item in self.rig[0].remove_from_drive():
                     self.inventory.append(item)
-                    print(f'{item.get_name()} has been retrieved from Rig\'s removable drive.')
+                    self.trace_level += 1
 
 
 
