@@ -43,15 +43,13 @@ class Hacker:
         if self.rig != []:
             print(f'{self.name} already has a rig.')
         else:
-            for item in self.inventory:
-                if item.get_description() == 'CryptoToken':
-                    name = input('Enter the name of your rig: ')
-                    self.inventory.remove(item)
-                    self.rig.append(Rig.Rig(name))
-                    print(f'Rig {name} has been acquired.')
-                    break
+            if self.scan_inventory('CryptoToken') == False:
+                print('No CryptoToken found')
             else:
-                print('No cryptotokens found')
+                self.scan_inventory('CryptoToken')
+                name = input('Enter the name of your rig: ')
+                self.rig.append(Rig.Rig(name))
+                print(f'Rig {name} has been acquired')
             self.check_time()
 
 
@@ -62,7 +60,10 @@ class Hacker:
             if self.rig[0].get_damage_counter()== 0:
                 print('No repair needed')
             else:
-                if self.scan_inventory('CryptoToken'):
+                if self.scan_inventory('CryptoToken') == False:
+                    print('No CryptoTokens available to repair rig')
+                else:
+                    self.scan_inventory('CryptoToken')
                     self.rig[0].repair()
                     print(f'{self.rig[0].get_name()} has been repaired.')
             self.check_time()
@@ -76,7 +77,10 @@ class Hacker:
             if self.rig[0].get_upgrade_level() == 3:
                 print('No further upgrades possible')
             else:
-                if self.scan_inventory('Hardware Patch'):
+                if self.scan_inventory('Hardware Patch')== False:
+                    print('No Hardware Patches available to upgrade rig.')
+                else:
+                    self.scan_inventory('Hardware Patch')
                     self.rig[0].upgrade()
                     print(f'{self.rig[0].get_name()} has been upgraded.')
             self.check_time()
@@ -89,9 +93,7 @@ class Hacker:
                 self.inventory.remove(item)
                 print(f'{item.get_name()} has been used.')
                 break
-                return True
             else:
-                print(f'No {item} found')
                 return False
 
     def launch_dataspike(self,target):
