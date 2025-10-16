@@ -30,12 +30,6 @@ class Asset():
         else:
             self.encrypted = True
 
-    def decrypt(self):
-        if self.encrypted==False:
-            print(f'{self.name} is not encrypted')
-        else:
-            self.encrypted = False
-
 
     def get_name(self):
         return self.name
