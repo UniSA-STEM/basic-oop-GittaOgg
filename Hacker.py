@@ -85,10 +85,34 @@ class Hacker:
             if item.get_name() == asset_name:
                 self.inventory.remove(item)
                 print(f'{item.get_name()} has been used.')
+                break
                 return True
             else:
                 print(f'No {item} found')
                 return False
+
+    def launch_dataspike(self,target):
+        if self.scan_inventory('DataSpike'):
+            target.damage_counter -= target.damage_value
+            self.trace_level += 1
+            print(f'{target.get_name()} has been hit. Damage counter: {target.damage_counter}')
+            if target.damage_counter == 2:
+                for item in target.removable_drive:
+                    if item.get_encryption == False:
+                        target.inventory.remove(item)
+                        self.inventory.append(item)
+                        print(f'{item.get_name()} has been acquired.\n')
+
+    def encrypt_asset(self, asset):
+        if self.scan_inventory('Security Chip')== True:
+            for item in self.inventory:
+                if item.get_name() == asset and item.get_encryption == False:
+                    item.encrypt()
+                    self.inventory.remove('Security Chip')
+                    print(f'{asset} has been encrypted.')
+                    break
+
+
 
 
 
