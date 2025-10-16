@@ -20,8 +20,6 @@ class Hacker:
         self.trace_level = trace_level
         self.inventory.append(Asset.Asset('CT1','CryptoToken'))
 
-
-
     def __str__(self):
         inventory_str = ''
         for item in self.inventory:
@@ -91,7 +89,6 @@ class Hacker:
         for item in self.inventory:
             if item.get_name() == asset_name:
                 self.inventory.remove(item)
-                print(f'{item.get_name()} has been used.')
                 break
             else:
                 return False
@@ -100,10 +97,13 @@ class Hacker:
         if self.trace_level >= 5:
             print(f'Trace level is at {self.trace_level}. Cannot launch dataspike.')
         else:
-            if self.scan_inventory('DataSpike'):
+            if self.scan_inventory('DataSpike')== False:
+                print('No DataSpike found')
+            else:
+                self.scan_inventory('DataSpike')
                 target.damage_counter -= target.damage_value
                 self.trace_level += 1
-                print(f'{target.get_name()} has been hit. Damage counter: {target.damage_counter}')
+                print(f'{target.get_name()} has been hit- current damage = {target.damage_counter}')
                 if target.damage_counter == 2:
                     for item in target.removable_drive:
                         if item.get_encryption == False:
@@ -115,11 +115,13 @@ class Hacker:
         if self.trace_level >= 5:
             print(f'Trace level is at {self.trace_level}. Cannot encrypt asset.')
         else:
-            if self.scan_inventory('Security Chip')== True:
+            if self.scan_inventory('Security Chip')== False:
+                print('No Security Chip found')
+            else:
                 for item in self.inventory:
                     if item.get_name() == asset and item.get_encryption == False:
                         item.encrypt()
-                        self.inventory.remove('Security Chip')
+                        self.scan_inventory('Security Chip')
                         print(f'{asset} has been encrypted.')
                         break
 
