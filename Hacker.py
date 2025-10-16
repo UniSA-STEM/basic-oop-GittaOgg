@@ -52,6 +52,7 @@ class Hacker:
                     break
             else:
                 print('No cryptotokens found')
+            self.check_time()
 
 
     def repair_rig(self):
@@ -64,6 +65,7 @@ class Hacker:
                 if self.scan_inventory('CryptoToken'):
                     self.rig[0].repair()
                     print(f'{self.rig[0].get_name()} has been repaired.')
+            self.check_time()
 
 
 
@@ -77,6 +79,7 @@ class Hacker:
                 if self.scan_inventory('Hardware Patch'):
                     self.rig[0].upgrade()
                     print(f'{self.rig[0].get_name()} has been upgraded.')
+            self.check_time()
 
 
 
@@ -122,35 +125,49 @@ class Hacker:
         if self.trace_level >= 5:
             print(f'Trace level is at {self.trace_level}. Cannot transfer assets.')
         else:
-            storing = input('Enter name of asset to store, or enter "All" to store all assets: ')
-            if storing == 'All':
-                if len(self.inventory) > self.rig[0].max_assets - len(self.rig[0].removable_drive):
-                    print(f'Inventory contains {len(self.inventory)} and {self.rig[0].get_name()} can only store '
-                          f'{self.rig[0].max_assets - len(self.rig[0].removable_drive)} more assets.')
+            if self.rig == []:
+                print('No rig found.')
+            else:
+                storing = input('Enter name of asset to store, or enter "All" to store all assets: ')
+                if storing == 'All':
+                    if len(self.inventory) > self.rig[0].max_assets - len(self.rig[0].removable_drive):
+                        print(f'Inventory contains {len(self.inventory)} and {self.rig[0].get_name()} can only store '
+                            f'{self.rig[0].max_assets - len(self.rig[0].removable_drive)} more assets.')
+                    else:
+                        for item in self.inventory:
+                            self.inventory.remove(item)
+                            self.rig[0].add_to_drive(storing)
+                            self.trace_level += 1
+                        print('All assets have been stored in rig\'s drive')
                 else:
                     for item in self.inventory:
-                        self.inventory.remove(item)
-                        self.rig[0].add_to_drive(storing)
-                        self.trace_level += 1
-                    print('All assets have been stored in rig\'s drive')
-            else:
-                for item in self.inventory:
-                    if item.get_name() == asset:
-                        self.inventory.remove(item)
-                        self.rig[0].add_to_drive(asset)
-                        print(f'{item.get_name()} has been stored in Rig\'s removable drive.')
-                        self.trace_level += 1
-                        break
+                        if item.get_name() == asset:
+                            self.inventory.remove(item)
+                            self.rig[0].add_to_drive(asset)
+                            print(f'{item.get_name()} has been stored in Rig\'s removable drive.')
+                            self.trace_level += 1
+                            break
 
     def retrieve_asset(self):
         if self.trace_level >= 5:
             print(f'Trace level is at {self.trace_level}. Cannot transfer assets.')
         else:
-            if type(self.rig[0].remove_from_drive()) == list:
-                for item in self.rig[0].remove_from_drive():
-                    self.inventory.append(item)
-                    self.trace_level += 1
+            if self.rig== []:
+                print('No rig found.')
+            else:
+                if type(self.rig[0].remove_from_drive()) == list:
+                    for item in self.rig[0].remove_from_drive():
+                        self.inventory.append(item)
+                        self.trace_level += 1
+                self.check_time()
 
+    def check_time(self):
+        if self.rig[0].time >= 5:
+            new_asset = self.rig[0].generate_asset()
+            self.inventory.append(new_asset)
+            print(f'{self.rig[0].get_name()} has generated a {new_asset.description} and added to '
+                  f'{self.name}\'s inventory.')
+            self.rig[0].time = 0
 
 
 
