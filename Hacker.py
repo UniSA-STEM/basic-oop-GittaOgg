@@ -18,7 +18,7 @@ class Hacker:
         self.rig = rig
         self.inventory = inventory
         self.trace_level = trace_level
-        self.inventory.append(Asset.Asset('CryptoToken','used for ....'))
+        self.inventory.append(Asset.Asset('CryptoToken','used for acquiring or repairing rigs'))
 
 
 
@@ -36,7 +36,7 @@ class Hacker:
         return (f'**********\nHacker\'s name is {self.name} and has a trace level of {self.trace_level}.'
                 f'\n{self.name} {rig_str}' 
                 f'\n{self.name}\'s inventory consists of: \n{inventory_str}'
-                f'\n**********\n')
+                f'**********\n')
 
 
     def AcquireRig(self):
@@ -48,6 +48,7 @@ class Hacker:
                     name = input('Enter the name of your rig: ')
                     self.inventory.remove(item)
                     self.rig.append(Rig.Rig(name))
+                    print(f'Rig {name} has been acquired.')
                     break
             else:
                 print('No cryptotokens found')
@@ -60,13 +61,11 @@ class Hacker:
             if self.rig[0].get_damage_counter()== 0:
                 print('No repair needed')
             else:
-                for item in self.inventory:
-                    if item.get_name() == 'CryptoToken':
-                        self.rig[0].repair()
-                        self.inventory.remove(item)
-                        break
-                else:
-                    print('No Cryptotokens found')
+                if self.scan_inventory('CryptoToken'):
+                    self.rig[0].repair()
+                    print(f'{self.rig[0].get_name()} has been repaired.')
+
+
 
     def upgrade_rig(self):
         if self.rig == []:
@@ -75,21 +74,27 @@ class Hacker:
             if self.rig[0].get_upgrade_level() == 3:
                 print('No further upgrades possible')
             else:
-                for item in self.inventory:
-                    if item.get_name() == 'Hardware Patch':
-                        self.rig[0].upgrade()
-                        self.inventory.remove(item)
-                        break
-                    else:
-                        print('No Hardware Patches found')
+                if self.scan_inventory('Hardware Patch'):
+                    self.rig[0].upgrade()
+                    print(f'{self.rig[0].get_name()} has been upgraded.')
+
+
+
+    def scan_inventory(self, asset_name):
+        for item in self.inventory:
+            if item.get_name() == asset_name:
+                self.inventory.remove(item)
+                print(f'{item.get_name()} has been used.')
+                return True
+            else:
+                print(f'No {item} found')
+                return False
 
 
 
 
 
-hack1 = Hacker('TestHacker')
+hack1= Hacker('hackname')
 print(hack1)
-hack1.AcquireRig()
-print(hack1)
-hack1.AcquireRig()
-print(hack1)
+
+
