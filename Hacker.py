@@ -118,16 +118,27 @@ class Hacker:
                         print(f'{asset} has been encrypted.')
                         break
 
-    def store_asset(self,asset):
+    def store_asset(self):
         if self.trace_level >= 5:
             print(f'Trace level is at {self.trace_level}. Cannot transfer assets.')
         else:
-            for item in self.inventory:
-                if item.get_name() == asset:
-                    self.inventory.remove(item)
-                    self.rig[0].add_to_drive(asset)
-                    print(f'{item.get_name()} has been stored in Rig\'s removable drive.')
-                    break
+            storing = input('Enter name of asset to store, or enter "All" to store all assets: ')
+            if storing == 'All':
+                if len(self.inventory) > self.rig[0].max_assets - len(self.rig[0].removable_drive):
+                    print(f'Inventory contains {len(self.inventory)} and {self.rig[0].get_name()} can only store '
+                          f'{self.rig[0].max_assets - len(self.rig[0].removable_drive)} more assets.')
+                else:
+                    for item in self.inventory:
+                        self.inventory.remove(item)
+                        self.rig[0].add_to_drive(storing)
+                    print('All assets have been stored in rig\'s drive')
+            else:
+                for item in self.inventory:
+                    if item.get_name() == asset:
+                        self.inventory.remove(item)
+                        self.rig[0].add_to_drive(asset)
+                        print(f'{item.get_name()} has been stored in Rig\'s removable drive.')
+                        break
 
     def retrieve_asset(self,asset):
         if self.trace_level >= 5:
