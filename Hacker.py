@@ -92,28 +92,52 @@ class Hacker:
                 return False
 
     def launch_dataspike(self,target):
-        if self.scan_inventory('DataSpike'):
-            target.damage_counter -= target.damage_value
-            self.trace_level += 1
-            print(f'{target.get_name()} has been hit. Damage counter: {target.damage_counter}')
-            if target.damage_counter == 2:
-                for item in target.removable_drive:
-                    if item.get_encryption == False:
-                        target.inventory.remove(item)
-                        self.inventory.append(item)
-                        print(f'{item.get_name()} has been acquired.\n')
+        if self.trace_level >= 5:
+            print(f'Trace level is at {self.trace_level}. Cannot launch dataspike.')
+        else:
+            if self.scan_inventory('DataSpike'):
+                target.damage_counter -= target.damage_value
+                self.trace_level += 1
+                print(f'{target.get_name()} has been hit. Damage counter: {target.damage_counter}')
+                if target.damage_counter == 2:
+                    for item in target.removable_drive:
+                        if item.get_encryption == False:
+                            target.inventory.remove(item)
+                            self.inventory.append(item)
+                            print(f'{item.get_name()} has been acquired.\n')
 
     def encrypt_asset(self, asset):
-        if self.scan_inventory('Security Chip')== True:
+        if self.trace_level >= 5:
+            print(f'Trace level is at {self.trace_level}. Cannot encrypt asset.')
+        else:
+            if self.scan_inventory('Security Chip')== True:
+                for item in self.inventory:
+                    if item.get_name() == asset and item.get_encryption == False:
+                        item.encrypt()
+                        self.inventory.remove('Security Chip')
+                        print(f'{asset} has been encrypted.')
+                        break
+
+    def store_asset(self,asset):
+        if self.trace_level >= 5:
+            print(f'Trace level is at {self.trace_level}. Cannot transfer assets.')
+        else:
             for item in self.inventory:
-                if item.get_name() == asset and item.get_encryption == False:
-                    item.encrypt()
-                    self.inventory.remove('Security Chip')
-                    print(f'{asset} has been encrypted.')
+                if item.get_name() == asset:
+                    self.inventory.remove(item)
+                    self.rig[0].add_to_drive(asset)
+                    print(f'{item.get_name()} has been stored in Rig\'s removable drive.')
                     break
 
-
-
+    def retrieve_asset(self,asset):
+        if self.trace_level >= 5:
+            print(f'Trace level is at {self.trace_level}. Cannot transfer assets.')
+        else:
+            for item in self.inventory:
+                if item.get_name() == asset:
+                    self.rig[0].remove_from_drive(asset)
+                    self.inventory.append(item)
+                    print(f'{item.get_name()} has been retrieved from Rig\'s removable drive.')
 
 
 
