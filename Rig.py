@@ -22,8 +22,8 @@ class Rig:
         self.max_assets = max_assets
         self.time = time
         self.removable_drive = removable_drive
-        self.removable_drive.append(Asset.Asset('DS1','DataSpike'))
-        self.removable_drive.append(Asset.Asset('DS2','DataSpike'))
+        self.removable_drive.append(Asset.Asset('DataSpike','Used in battles'))
+        self.removable_drive.append(Asset.Asset('DataSpike','Used in battles'))
         if self.damage_counter == 0:
             self.condition = 'Pristine'
         elif 0 < self.damage_counter < 2:
@@ -34,9 +34,9 @@ class Rig:
 
 
     def __str__(self):
-        asset_list = '\n*'
+        asset_list = ''
         for asset in self.removable_drive:
-            asset_list = asset_list + asset.get_description() + '\n*'
+            asset_list = asset_list + f'{asset.__str__()}\n'
 
         self.time += 1
         return (f'**********\nRig\'s name is {self.name} and is currently {self.condition} ({self.damage_counter})'
@@ -95,7 +95,7 @@ class Rig:
                 return removal_list
         else:
             for item in self.removable_drive:
-                if item.get_description() == removing:
+                if item.get_name() == removing:
                     self.removable_drive.remove(item)
                     return removing
             else:
@@ -122,27 +122,19 @@ class Rig:
             self.upgrade_level += 1
 
     def generate_asset(self):
-        acceptable = ['CryptoToken','HardwarePatch','SecurityChip','DataSpike']
-        CT_Count = 2
-        HP_Count = 1
-        DS_Count = 3
-        SC_Count = 1
-        description = random.shuffle(acceptable)
-        if description == 'CryptoToken':
-            abbrev = 'CT'+str(CT_Count)
-            new = Asset.Asset(abbrev,description)
-            CT_Count += 1
-        elif description == 'HardwarePatch':
-            abbrev = 'HP'+str(HP_Count)
-            new = Asset.Asset(abbrev,description)
-            HP_Count += 1
-        elif description == 'SecurityChip':
-            abbrev = 'SC'+str(SC_Count)
-            new = Asset.Asset(abbrev,description)
-            SC_Count += 1
+        acceptable = ['Crypto Token','Hardware Patch','Security Chip','Data Spike']
+        item = random.shuffle(acceptable)
+        if item == 'Crypto Token':
+            description = 'Acquire or Repair Rigs'
+            new = Asset.Asset(item,description)
+        elif item == 'Hardware Patch':
+            description = 'For upgrading rigs'
+            new = Asset.Asset(item,description)
+        elif item == 'Security Chip':
+            description = 'For encrypting or decrypting assets'
+            new = Asset.Asset(item,description)
         else:
-            abbrev = 'DS'+str(DS_Count)
-            new = Asset.Asset(abbrev,description)
-            DS_Count += 1
+            description = 'Used in battles'
+            new = Asset.Asset(item,description)
         return new
 
