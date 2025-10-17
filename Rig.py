@@ -43,6 +43,10 @@ class Rig:
                 f' with an upgrade level of {self.upgrade_level}. {self.name} can hold a maximum of {self.max_assets} in '
                 f'the removable drive \n{self.name}\'s removable drive contains: \n{asset_list}**********\n')
 
+
+    def __eq__(self, other):
+        return self.name == other.name
+
     def check_condition(self):
         self.time += 1
         return f'{self.condition} ({self.damage_counter})'
