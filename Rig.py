@@ -36,7 +36,7 @@ class Rig:
     def __str__(self):
         asset_list = '\n*'
         for asset in self.removable_drive:
-            asset_list = asset_list + asset + '\n*'
+            asset_list = asset_list + asset.get_description() + '\n*'
 
         self.time += 1
         return (f'**********\nRig\'s name is {self.name} and is currently {self.condition} ({self.damage_counter})'
@@ -87,30 +87,38 @@ class Rig:
         removing = input('Enter name of asset to retrieve, or enter "All" to retrieve all assets: ')
         if removing == 'All':
             removal_list = []
-            for item in self.removable_drive:
+            for item in reversed(self.removable_drive):
                 self.removable_drive.remove(item)
                 removal_list.append(item)
-                return removal_list
+                print(removal_list)
+            return removal_list
         else:
-            if removing in self.removable_drive:
-                self.removable_drive.remove(removing)
-                return removing
+            for item in self.removable_drive:
+                if item.get_description() == removing:
+                    self.removable_drive.remove(item)
+                    return removing
             else:
                 print(f'There are no {removing}s in rig\'s removable drive')
 
 
     def repair(self):
-        self.time += 1
-        self.damage_counter = 0
-        self.condition = 'Pristine'
-        return f'{self.name} has been repaired to {self.condition}'
+        if self.damage_counter == 0:
+            print('No repair needed')
+        else:
+            self.time += 1
+            self.damage_counter = 0
+            self.condition = 'Pristine'
+            return f'{self.name} has been repaired to {self.condition}'
 
 
     def upgrade(self):
-        self.time += 1
-        self.max_assets += 1
-        self.damage_value -= 0.25
-        self.upgrade_level += 1
+        if self.upgrade_level >= 3:
+            print('unable to upgrade further.')
+        else:
+            self.time += 1
+            self.max_assets += 1
+            self.damage_value -= 0.25
+            self.upgrade_level += 1
 
     def generate_asset(self):
         acceptable = ['CryptoToken','HardwarePatch','SecurityChip','DataSpike']
