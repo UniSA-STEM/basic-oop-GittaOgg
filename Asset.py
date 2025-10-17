@@ -27,14 +27,26 @@ class Asset():
     def encrypt(self):
         if self.encrypted==True:
             print(f'{self.name} is already encrypted')
-        else:
-            self.encrypted = True
+
+
+    def decrypt(self):
+        if self.encrypted==True:
+            self.encrypted = False
 
 
     def get_name(self):
         return self.name
 
+    def get_description(self):
+        return self.description
+
     def get_encryption(self):
         return self.encrypted
 
 
+ass1 = Asset('HP1','testhardwarepatch', encrypted=True)
+print(ass1)
+ass1.encrypt()
+print(ass1)
+ass1.decrypt()
+print(ass1)
