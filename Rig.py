@@ -88,10 +88,11 @@ class Rig:
         if removing == 'All':
             removal_list = []
             for item in reversed(self.removable_drive):
-                self.removable_drive.remove(item)
-                removal_list.append(item)
-                print(removal_list)
-            return removal_list
+                if item.get_encryption()==False:
+                    self.removable_drive.remove(item)
+                    removal_list.append(item)
+                    print(removal_list)
+                return removal_list
         else:
             for item in self.removable_drive:
                 if item.get_description() == removing:
