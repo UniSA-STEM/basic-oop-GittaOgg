@@ -185,18 +185,21 @@ class Hacker:
                             f'{self.rig[0].max_assets - len(self.rig[0].removable_drive)} more assets.')
                     else:
                         for item in self.inventory:
-                            self.inventory.remove(item)
-                            self.rig[0].add_to_drive(storing)
-                            self.trace_level += 1
-                        print('All assets have been stored in rig\'s drive')
+                            if item.get_encryption == False:
+                                self.inventory.remove(item)
+                                self.rig[0].add_to_drive(storing)
+                                self.trace_level += 1
+                            print('All decrypted assets have been stored in rig\'s drive')
                 else:
                     for item in self.inventory:
-                        if item.get_description() == storing:
+                        if item.get_description() == storing and item.get_encryption == False:
                             self.inventory.remove(item)
                             self.rig[0].add_to_drive(storing)
                             print(f'{item.get_description()} has been stored in Rig\'s removable drive.')
                             self.trace_level += 1
                             break
+                        else:
+                            print(f'No decrypted {item.get_description()}\'s found in inventory.')
 
     def retrieve_asset(self):
         if self.trace_level >= 5:
@@ -222,7 +225,7 @@ class Hacker:
 
 hack1= Hacker('hackname')
 print(hack1)
-hack1.acquire_rig()
+hack1.inventory.append(Asset.Asset('SC1','Security Chip'))
 print(hack1)
 
 
