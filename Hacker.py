@@ -74,13 +74,15 @@ class Hacker:
             if self.rig[0].get_upgrade_level() == 3:
                 print('No further upgrades possible')
             else:
-                if self.scan_inventory('Hardware Patch') != False:
-                    self.scan_inventory('Hardware Patch')
-                    self.rig[0].upgrade()
-                    print(f'{self.rig[0].get_name()} has been upgraded.')
+                for item in self.inventory:
+                    if item.get_name() == 'Hardware Patch':
+                        self.scan_inventory('Hardware Patch')
+                        self.rig[0].upgrade()
+                        print(f'{self.rig[0].get_name()} has been upgraded.')
+                        break
                 else:
-                    print('No Hardware Patches available to upgrade rig.')
-            self.check_time()
+                    print('No hardware patches found in inventory')
+                self.check_time()
 
 
 
@@ -91,6 +93,7 @@ class Hacker:
                 break
             else:
                 return False
+        return None
 
     def launch_dataspike(self,target):
         if self.trace_level >= 5:
@@ -227,4 +230,6 @@ class Hacker:
 
 hack1= Hacker('hackname')
 hack1.acquire_rig()
+print(hack1.rig[0])
 hack1.upgrade_rig()
+print(hack1.rig[0])
