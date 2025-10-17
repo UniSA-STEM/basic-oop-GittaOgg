@@ -37,7 +37,7 @@ class Hacker:
                 f'**********\n')
 
 
-    def AcquireRig(self):
+    def acquire_rig(self):
         if self.rig != []:
             print(f'{self.name} already has a rig.')
         else:
@@ -48,8 +48,7 @@ class Hacker:
                 name = input('Enter the name of your rig: ')
                 self.rig.append(Rig.Rig(name))
                 print(f'Rig {name} has been acquired')
-            self.check_time()
-
+        self.check_time()
 
     def repair_rig(self):
         if self.rig == []:
@@ -65,8 +64,6 @@ class Hacker:
                     self.rig[0].repair()
                     print(f'{self.rig[0].get_name()} has been repaired.')
             self.check_time()
-
-
 
     def upgrade_rig(self):
         if self.rig == []:
@@ -87,7 +84,7 @@ class Hacker:
 
     def scan_inventory(self, asset_name):
         for item in self.inventory:
-            if item.get_name() == asset_name:
+            if item.get_description() == asset_name:
                 self.inventory.remove(item)
                 break
             else:
@@ -105,11 +102,12 @@ class Hacker:
                 self.trace_level += 1
                 print(f'{target.get_name()} has been hit- current damage = {target.damage_counter}')
                 if target.damage_counter == 2:
-                    for item in target.removable_drive:
+                    for item in reversed(target.removable_drive):
                         if item.get_encryption == False:
-                            target.inventory.remove(item)
+                            target.removable_drive.remove(item)
                             self.inventory.append(item)
-                            print(f'{item.get_name()} has been acquired.\n')
+                            print(f'{item.get_description()} has been acquired.\n')
+
 
     def encrypt_asset(self, asset):
         if self.trace_level >= 5:
@@ -119,11 +117,26 @@ class Hacker:
                 print('No Security Chip found')
             else:
                 for item in self.inventory:
-                    if item.get_name() == asset and item.get_encryption == False:
+                    if item.get_description() == asset and item.get_encryption == False:
                         item.encrypt()
                         self.scan_inventory('Security Chip')
                         print(f'{asset} has been encrypted.')
                         break
+
+    def decrypt_asset(self, asset):
+        if self.trace_level >= 5:
+            print(f'Trace level is at {self.trace_level}. Cannot decrypt asset.')
+        else:
+            if self.scan_inventory('Security Chip')== False:
+                print('No Security Chip found')
+            else:
+                for item in self.inventory:
+                    if item.get_description() == asset and item.get_encryption == True:
+                        item.decrypt()
+                        self.scan_inventory('Security Chip')
+                        print(f'{asset} has been decrypted.')
+                        break
+
 
     def store_asset(self):
         if self.trace_level >= 5:
@@ -132,7 +145,7 @@ class Hacker:
             if self.rig == []:
                 print('No rig found.')
             else:
-                storing = input('Enter name of asset to store, or enter "All" to store all assets: ')
+                storing = input('Enter type of asset to store, or enter "All" to store all assets: ')
                 if storing == 'All':
                     if len(self.inventory) > self.rig[0].max_assets - len(self.rig[0].removable_drive):
                         print(f'Inventory contains {len(self.inventory)} and {self.rig[0].get_name()} can only store '
@@ -145,10 +158,10 @@ class Hacker:
                         print('All assets have been stored in rig\'s drive')
                 else:
                     for item in self.inventory:
-                        if item.get_name() == asset:
+                        if item.get_description() == storing:
                             self.inventory.remove(item)
-                            self.rig[0].add_to_drive(asset)
-                            print(f'{item.get_name()} has been stored in Rig\'s removable drive.')
+                            self.rig[0].add_to_drive(storing)
+                            print(f'{item.get_description()} has been stored in Rig\'s removable drive.')
                             self.trace_level += 1
                             break
 
@@ -174,8 +187,9 @@ class Hacker:
             self.rig[0].time = 0
 
 
-
 hack1= Hacker('hackname')
+print(hack1)
+hack1.acquire_rig()
 print(hack1)
 
 
