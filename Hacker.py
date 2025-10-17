@@ -116,12 +116,30 @@ class Hacker:
             if self.scan_inventory('Security Chip')== False:
                 print('No Security Chip found')
             else:
-                for item in self.inventory:
-                    if item.get_description() == asset and item.get_encryption == False:
-                        item.encrypt()
-                        self.scan_inventory('Security Chip')
-                        print(f'{asset} has been encrypted.')
-                        break
+                location = input('Where is the asset located? Enter H for hacker\'s inventory or R for rig\'s drive: ')
+                while location != 'H' or location != 'R':
+                    print('Please enter H or R.')
+                if location == 'H':
+                    for item in self.inventory:
+                        if item.get_description() == asset and item.get_encryption == False:
+                            item.encrypt()
+                            self.scan_inventory('Security Chip')
+                            print(f'{asset} has been encrypted.')
+                            break
+                        else:
+                            print(f'No {asset} found in hackers\'s inventory.')
+                else:
+                    for item in self.rig[0].removable_drive:
+                        if item.get_description() == asset and item.get_encryption == False:
+                            item.encrypt()
+                            self.scan_inventory('Security Chip')
+                            print(f'{asset} has been encrypted.')
+                            break
+                        else:
+                            print(f'No {asset} found in rig\'s drive.')
+
+
+
 
     def decrypt_asset(self, asset):
         if self.trace_level >= 5:
@@ -130,12 +148,27 @@ class Hacker:
             if self.scan_inventory('Security Chip')== False:
                 print('No Security Chip found')
             else:
-                for item in self.inventory:
-                    if item.get_description() == asset and item.get_encryption == True:
-                        item.decrypt()
-                        self.scan_inventory('Security Chip')
-                        print(f'{asset} has been decrypted.')
-                        break
+                location = ('Where is the asset located? Enter H for hacker\'s inventory or R for rig\'s drive: ')
+                while location != 'H' or location != 'R':
+                    print('Please enter H or R.')
+                if location == 'H':
+                    for item in self.inventory:
+                        if item.get_description() == asset and item.get_encryption == True:
+                            item.decrypt()
+                            self.scan_inventory('Security Chip')
+                            print(f'{asset} has been decrypted.')
+                            break
+                        else:
+                            print(f'No {asset} found in hackers\'s inventory.')
+                else:
+                    for item in self.rig[0].removable_drive:
+                        if item.get_description() == asset and item.get_encryption == True:
+                            item.decrypt()
+                            self.scan_inventory('Security Chip')
+                            print(f'{asset} has been decrypted.')
+                        else:
+                            print(f'No {asset} found in rig\'s drive.')
+
 
 
     def store_asset(self):
