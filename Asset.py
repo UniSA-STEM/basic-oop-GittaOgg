@@ -20,6 +20,10 @@ class Asset():
         else:
             return f'**********\n<{self.name}>: <{self.description}>\n'
 
+    def __eq__(self, other):
+        return isinstance(other, Asset) and self.name == other.name and self.description == other.description
+
+
     def get_encryption(self):
         return self.encrypted
 
@@ -44,9 +48,3 @@ class Asset():
         return self.encrypted
 
 
-ass1 = Asset('HP1','testhardwarepatch', encrypted=True)
-print(ass1)
-ass1.encrypt()
-print(ass1)
-ass1.decrypt()
-print(ass1)
