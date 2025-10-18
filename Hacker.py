@@ -248,33 +248,33 @@ class Hacker:
                     if self.rig[0].check_drive('Data Spike') == False:
                         print('No data spike found in rig drive- cannot launch')
                     else:
-                        if target in globals() and type(target)== Rig:
-                            target.damage_counter -= target.damage_value
+                        if type(target)== Hacker:
+                            target.rig[0].damage_counter -= target.rig[0].damage_value
                             self.trace_level += 1
-                            print(f'{target.get_name()} has been hit. Current damage = {target.damage_counter}')
-                            if target.damage_counter == 2:
-                                for item in reversed(target.removable_drive):
+                            print(f'{target.name}\'s rig has been hit. Current damage = {target.rig[0].damage_counter}')
+                            if target.rig[0].damage_counter == 2:
+                                for item in reversed(target.rig[0].removable_drive):
                                     if item.get_encryption() is False:
-                                        target.removable_drive.remove(item)
+                                        target.rig[0].removable_drive.remove(item)
                                         self.inventory.append(item)
                                         print(f'{item.get_name()} has been acquired.')
                                 else:
-                                    print(f'{target.get_name()} has no decrypted assets to acquire.')
+                                    print(f'{target.name}\'s rig has no decrypted assets to acquire.')
                         else:
                             print(f'Cannot find rig.')
             else:
-                if target in globals() and type(target)== Rig:
-                    target.damage_counter -= target.damage_value
+                if type(target)== Hacker:
+                    target.rig[0].damage_counter -= target.rig[0].damage_value
                     self.trace_level += 1
-                    print(f'{target.get_name()} has been hit. Current damage = {target.damage_counter}')
-                    if target.damage_counter == 2:
-                        for item in reversed(target.removable_drive):
+                    print(f'{target.name}\'s rig has been hit. Current damage = {target.rig[0].damage_counter}')
+                    if target.rig[0].damage_counter == 2:
+                        for item in reversed(target.rig[0].removable_drive):
                             if item.get_encryption() is False:
-                                target.removable_drive.remove(item)
+                                target.rig[0].removable_drive.remove(item)
                                 self.inventory.append(item)
                                 print(f'{item.get_name()} has been acquired.')
                         else:
-                            print(f'{target.get_name} has no decrypted assets to acquire.')
+                            print(f'{target.name}\'s rig has no decrypted assets to acquire.')
                 else:
                     print('Cannot find rig.')
 
@@ -289,13 +289,10 @@ class Hacker:
                   f'{self.name}\'s inventory.')
             self.rig[0].time = 0
 
+hack1 = Hacker('hacker1')
+hack1.acquire_rig()
 
-hack1= Hacker('hackman')
-hack2 = Hacker('hackman2')
-hack3 = Hacker('hackman3')
-hack4 = Hacker('hackman4')
-hack1.inventory.append(Asset.Asset('test1','Test1'))
-print(hack1)
-print(hack2)
-print(hack3)
-print(hack4)
+hack2 = Hacker('hacker2')
+hack2.acquire_rig()
+
+hack1.launch_dataspike(hack2)
