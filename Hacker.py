@@ -213,9 +213,46 @@ class Hacker:
                                     break
                             else:
                                 print(f'No decrypted {to_encrypt}\'s found in drive.')
+                    else:
+                        print('Location not found.')
             else:
                 print('No available security chips found.')
 
+    def decrypt_asset(self):
+        if self.trace_level >= 5:
+            print(f'Trace level is at {self.trace_level}. Cannot decrypt assets.')
+        else:
+            for item in self.inventory:
+                if item.get_name() == 'Security Chip':
+                    to_decrypt = input('Enter the name of the asset to decrypt: ')
+                    location = input('Enter the location of the asset- H for hacker inventory, R for rig drive: ')
+                    if location == 'H':
+                        for item in self.inventory:
+                            if item.get_name() == to_decrypt and item.get_encryption() is True:
+                                item.decrypt()
+                                self.scan_inventory('Security Chip')
+                                self.trace_level += 1
+                                print(f'{item.get_name()} has been decrypted.')
+                                break
+                        else:
+                            print(f'No encrypted {to_decrypt}\'s found in inventory.')
+                    elif location == 'R':
+                        if self.rig == []:
+                            print('No rig found.')
+                        else:
+                            for item in self.rig[0].removable_drive:
+                                if item.get_name() == to_decrypt and item.get_encryption() is True:
+                                    item.decrypt()
+                                    self.scan_inventory('Security Chip')
+                                    self.trace_level += 1
+                                    print(f'{item.get_name()} has been decrypted.')
+                                    break
+                            else:
+                                print(f'No encrypted {to_decrypt}\'s found in drive.')
+                    else:
+                        print('Location not found')
+                else:
+                    print('No available security chips found.')
 
 
 
@@ -232,5 +269,4 @@ class Hacker:
 hack1= Hacker('hackman')
 hack1.acquire_rig()
 hack1.inventory.append(Asset.Asset('Security Chip', 'testing'))
-hack1.encrypt_asset()
-print(hack1.rig[0])
+hack1.decrypt_asset()
