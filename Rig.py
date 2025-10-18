@@ -126,7 +126,7 @@ class Rig:
 
     def generate_asset(self):
         acceptable = ['Crypto Token','Hardware Patch','Security Chip','Data Spike']
-        item = random.shuffle(acceptable)
+        item = acceptable[random.randint(0,3)]
         if item == 'Crypto Token':
             description = 'Acquire or Repair Rigs'
             new = Asset.Asset(item,description)
