@@ -130,7 +130,7 @@ class Hacker:
                         print(f'Inventory contains {len(self.inventory)} and {self.rig[0].get_name()} can only store '
                             f'{self.rig[0].max_assets - len(self.rig[0].removable_drive)} more assets.')
                     else:
-                        for item in self.inventory:
+                        for item in reversed(self.inventory):
                             if item.get_encryption() is False:
                                 self.inventory.remove(item)
                                 self.rig[0].add_to_drive(item)
@@ -158,11 +158,25 @@ class Hacker:
             if self.rig== []:
                 print('No rig found.')
             else:
-                if type(self.rig[0].remove_from_drive()) == list:
-                    for item in self.rig[0].remove_from_drive():
-                        self.inventory.append(item)
-                        self.trace_level += 1
-                self.check_time()
+                retrieving = input('Enter type of asset to retrieve, or enter "All" to retrieve all assets: ')
+                if retrieving == 'All':
+                    for item in reversed(self.rig[0].removable_drive):
+                        if item.get_encryption() is False:
+                            self.rig[0].removable_drive.remove(item)
+                            self.inventory.append(item)
+                            self.trace_level += 1
+                            print(f'{item.get_name()} has been retrieved.')
+                else:
+                    for item in self.rig[0].removable_drive:
+                        if item.get_name() == retrieving and item.get_encryption() is False:
+                            self.rig[0].removable_drive.remove(item)
+                            self.inventory.append(item)
+                            self.trace_level += 1
+                            print(f'{item.get_name()} has been retrieved.')
+                            break
+                    else:
+                        print(f'No decrypted {item.get_name()}\'s found in drive.')
+
 
     def check_time(self):
         if self.rig[0].time >= 5:
@@ -175,8 +189,6 @@ class Hacker:
 
 hack1= Hacker('hackman')
 hack1.acquire_rig()
-hack1.inventory.append(Asset.Asset('Hardware Patch', 'testing'))
-print(hack1)
-hack1.store_asset()
-print(hack1)
 print(hack1.rig[0])
+hack1.retrieve_asset()
+print(hack1)
