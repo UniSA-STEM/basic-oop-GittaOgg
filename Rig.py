@@ -13,15 +13,14 @@ import Asset
 
 class Rig:
 
-    def __init__(self, name, damage_counter= 0, upgrade_level = 0, damage_value = 1, max_assets = 5,
-                 removable_drive=[], time =0):
-        self.damage_counter = damage_counter
+    def __init__(self, name):
+        self.damage_counter = 0
         self.name = name
-        self.upgrade_level = upgrade_level
-        self.damage_value = damage_value
-        self.max_assets = max_assets
-        self.time = time
-        self.removable_drive = removable_drive
+        self.upgrade_level = 0
+        self.damage_value = 1
+        self.max_assets = 5
+        self.time = 0
+        self.removable_drive = []
         self.removable_drive.append(Asset.Asset('Data Spike','Used in battles'))
         self.removable_drive.append(Asset.Asset('Data Spike','Used in battles'))
         if self.damage_counter == 0:
