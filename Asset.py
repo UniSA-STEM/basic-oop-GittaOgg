@@ -29,12 +29,11 @@ class Asset():
 
 
     def encrypt(self):
-        if self.encrypted==True:
-            print(f'{self.name} is already encrypted')
-
+        if not self.encrypted:
+            self.encrypted = True
 
     def decrypt(self):
-        if self.encrypted==True:
+        if self.encrypted:
             self.encrypted = False
 
 
