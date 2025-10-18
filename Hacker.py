@@ -84,16 +84,20 @@ class Hacker:
                     print('No hardware patches found in inventory')
                 self.check_time()
 
-
-
-    def scan_inventory(self, asset_name):
+    def check_inventory(self, asset):
+        list = []
         for item in self.inventory:
-            if item.get_name() == asset_name:
+            if item.get_name() == asset:
+                list.append(item)
+                return list
+
+    def scan_inventory(self, asset):
+        for item in self.inventory:
+            if item.get_name() == asset:
                 self.inventory.remove(item)
-                break
+                return True
             else:
                 return False
-        return None
 
     def launch_dataspike(self,target):
         if self.trace_level >= 5:
@@ -113,69 +117,6 @@ class Hacker:
                             self.inventory.append(item)
                             print(f'{item.get_name()} has been acquired.\n')
 
-
-    def encrypt_asset(self, asset):
-        if self.trace_level >= 5:
-            print(f'Trace level is at {self.trace_level}. Cannot encrypt asset.')
-        else:
-            if self.scan_inventory('Security Chip')== False:
-                print('No Security Chip found')
-            else:
-                location = input('Where is the asset located? Enter H for hacker\'s inventory or R for rig\'s drive: ')
-                while location != 'H' or location != 'R':
-                    print('Please enter H or R.')
-                if location == 'H':
-                    for item in self.inventory:
-                        if item.get_dname() == asset and item.get_encryption == False:
-                            item.encrypt()
-                            self.scan_inventory('Security Chip')
-                            print(f'{asset} has been encrypted.')
-                            break
-                        else:
-                            print(f'No {asset} found in hackers\'s inventory.')
-                else:
-                    for item in self.rig[0].removable_drive:
-                        if item.get_name() == asset and item.get_encryption == False:
-                            item.encrypt()
-                            self.scan_inventory('Security Chip')
-                            print(f'{asset} has been encrypted.')
-                            break
-                        else:
-                            print(f'No {asset} found in rig\'s drive.')
-
-
-
-
-    def decrypt_asset(self, asset):
-        if self.trace_level >= 5:
-            print(f'Trace level is at {self.trace_level}. Cannot decrypt asset.')
-        else:
-            if self.scan_inventory('Security Chip')== False:
-                print('No Security Chip found')
-            else:
-                location = ('Where is the asset located? Enter H for hacker\'s inventory or R for rig\'s drive: ')
-                while location != 'H' or location != 'R':
-                    print('Please enter H or R.')
-                if location == 'H':
-                    for item in self.inventory:
-                        if item.get_name() == asset and item.get_encryption == True:
-                            item.decrypt()
-                            self.scan_inventory('Security Chip')
-                            print(f'{asset} has been decrypted.')
-                            break
-                        else:
-                            print(f'No {asset} found in hackers\'s inventory.')
-                else:
-                    for item in self.rig[0].removable_drive:
-                        if item.get_name() == asset and item.get_encryption == True:
-                            item.decrypt()
-                            self.scan_inventory('Security Chip')
-                            print(f'{asset} has been decrypted.')
-                        else:
-                            print(f'No {asset} found in rig\'s drive.')
-
-
-
     def store_asset(self):
         if self.trace_level >= 5:
             print(f'Trace level is at {self.trace_level}. Cannot transfer assets.')
@@ -189,17 +130,18 @@ class Hacker:
                         print(f'Inventory contains {len(self.inventory)} and {self.rig[0].get_name()} can only store '
                             f'{self.rig[0].max_assets - len(self.rig[0].removable_drive)} more assets.')
                     else:
-                        for item in reversed(self.inventory):
-                            if item.get_encryption == False:
+                        for item in self.inventory:
+                            if item.get_encryption() is False:
                                 self.inventory.remove(item)
-                                self.rig[0].add_to_drive(storing)
+                                self.rig[0].add_to_drive(item)
                                 self.trace_level += 1
-                            print('All decrypted assets have been stored in rig\'s drive')
+                                print(f'{item.get_name} has been moved')
+
                 else:
                     for item in self.inventory:
                         if item.get_name() == storing and item.get_encryption == False:
                             self.inventory.remove(item)
-                            self.rig[0].add_to_drive(storing)
+                            self.rig[0].add_to_drive(item)
                             print(f'{item.get_name()} has been stored in Rig\'s removable drive.')
                             self.trace_level += 1
                             break
@@ -228,8 +170,10 @@ class Hacker:
             self.rig[0].time = 0
 
 
-hack1= Hacker('hackname')
+hack1= Hacker('hackman')
 hack1.acquire_rig()
-print(hack1.rig[0])
-hack1.upgrade_rig()
+hack1.inventory.append(Asset.Asset('Hardware Patch', 'testing'))
+print(hack1)
+hack1.store_asset()
+print(hack1)
 print(hack1.rig[0])
