@@ -43,7 +43,7 @@ class Hacker:
         if self.rig:
             print(f'{self.name} already has a rig.')
         else:
-            if not self.scan_inventory('Crypto Token'):
+            if not self.check_inventory('Crypto Token'):
                 print('No Crypto Token found')
             else:
                 self.scan_inventory('Crypto Token')
@@ -59,7 +59,7 @@ class Hacker:
             if self.rig[0].get_damage_counter()== 0:
                 print('No repair needed')
             else:
-                if not self.scan_inventory('Crypto Token'):
+                if not self.check_inventory('Crypto Token'):
                     print('No Crypto Tokens available to repair rig')
                 else:
                     self.scan_inventory('Crypto Token')
@@ -74,7 +74,7 @@ class Hacker:
             if self.rig[0].get_upgrade_level() == 3:
                 print('No further upgrades possible')
             else:
-                if not self.scan_inventory('Hardware Patch'):
+                if not self.check_inventory('Hardware Patch'):
                     print('No hardware patches found in inventory')
                 else:
                    self.scan_inventory('Hardware Patch')
@@ -87,6 +87,14 @@ class Hacker:
         for item in self.inventory:
             if item.get_name() == asset:
                 self.inventory.remove(item)
+                return True
+        else:
+            return False
+
+
+    def check_inventory(self, asset):
+        for item in self.inventory:
+            if item.get_name() == asset:
                 return True
         else:
             return False
@@ -174,7 +182,7 @@ class Hacker:
         if self.trace_level >= 5:
             print(f'Trace level is at {self.trace_level}. Cannot encrypt assets.')
         else:
-            if not self.scan_inventory('Security Chip'):
+            if not self.check_inventory('Security Chip'):
                 print('No Security Chip found.')
             else:
                 to_encrypt = input('Enter the name of the asset to encrypt: ')
@@ -189,6 +197,20 @@ class Hacker:
                 else:
                     print('Location not found.')
 
+    def do_decryption(self, location, to_decrypt):
+        if location == 'H':
+            check = self.inventory
+        else:
+            check = self.rig[0].removable_drive
+        for asst in check:
+            if asst.get_name() == to_decrypt and asst.get_encryption() is True:
+                asst.encrypt()
+                self.scan_inventory('Security Chip')
+                self.trace_level += 1
+                print(f'{asst.get_name()} has been decrypted.')
+                break
+        else:
+            print(f'No encrypted {to_decrypt}\'s found in inventory.')
 
 
 
@@ -196,43 +218,27 @@ class Hacker:
         if self.trace_level >= 5:
             print(f'Trace level is at {self.trace_level}. Cannot decrypt assets.')
         else:
-            for item in self.inventory:
-                if item.get_name() == 'Security Chip':
-                    to_decrypt = input('Enter the name of the asset to decrypt: ')
-                    location = input('Enter the location of the asset- H for hacker inventory, R for rig drive: ')
-                    if location == 'H':
-                        for asst in self.inventory:
-                            if asst.get_name() == to_decrypt and asst.get_encryption() is True:
-                                asst.decrypt()
-                                self.scan_inventory('Security Chip')
-                                self.trace_level += 1
-                                print(f'{asst.get_name()} has been decrypted.')
-                                break
-                        else:
-                            print(f'No encrypted {to_decrypt}\'s found in inventory.')
-                    elif location == 'R':
-                        if self.rig == []:
-                            print('No rig found.')
-                        else:
-                            for item in self.rig[0].removable_drive:
-                                if item.get_name() == to_decrypt and item.get_encryption() is True:
-                                    item.decrypt()
-                                    self.scan_inventory('Security Chip')
-                                    self.trace_level += 1
-                                    print(f'{item.get_name()} has been decrypted.')
-                                    break
-                            else:
-                                print(f'No encrypted {to_decrypt}\'s found in drive.')
+            if not self.check_inventory('Security Chip'):
+                print('No Security Chip found.')
+            else:
+                to_decrypt = input('Enter the name of the asset to decrypt: ')
+                location = input('Enter the location of the asset- H for hacker inventory, R for rig drive: ')
+                if location == 'H':
+                    self.do_decryption(location, to_decrypt)
+                elif location == 'R':
+                    if self.rig == []:
+                        print('No rig found.')
                     else:
-                        print('Location not found')
+                        self.do_decryption(location, to_decrypt)
                 else:
-                    print('No available security chips found.')
+                    print('Location not found')
+
 
     def launch_dataspike(self, target):
         if self.trace_level >= 5:
             print('Trace level too high. Cannot launch dataspike.')
         else:
-            if not self.scan_inventory('Data Spike'):
+            if not self.check_inventory('Data Spike'):
                 print('No data spike found in hacker inventory, checking rig')
                 if not self.rig:
                     print('No rig found.')
@@ -280,10 +286,16 @@ class Hacker:
 
 
 hack1 = Hacker('hackname')
-hack1.inventory.append(Asset.Asset('Security Chip', 'test'))
-hack2 = Hacker('hackname2')
-hack2.inventory.append(Asset.Asset('Security Chip', 'test'))
+hack1.inventory.append(Asset.Asset('Security Chip', 'test1'))
+hack1.inventory.append(Asset.Asset('Security Chip', 'test2'))
+hack1.inventory.append(Asset.Asset('Security Chip', 'test3'))
+hack1.inventory.append(Asset.Asset('Security Chip', 'test4'))
+hack1.inventory.append(Asset.Asset('Crypto Token', 'test1'))
+hack1.inventory.append(Asset.Asset('Crypto Token', 'test2'))
+hack1.inventory.append(Asset.Asset('Crypto Token', 'test3'))
+
 hack1.encrypt_asset()
-hack2.encrypt_asset2()
+hack1.decrypt_asset()
+
+
 print(hack1)
-print(hack2)
