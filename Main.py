@@ -72,5 +72,5 @@ def test7():
     hack8.retrieve_asset()
 
 
-test1()
+test7()
 

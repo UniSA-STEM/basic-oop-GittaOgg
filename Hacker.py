@@ -49,7 +49,7 @@ class Hacker:
                 self.scan_inventory('Crypto Token')
                 name = input('Enter the name of your rig: ')
                 self.rig.append(Rig.Rig(name))
-                print(f'Rig {name} has been acquired')
+                print(f'Rig {name} has been acquired by {self.name}\n')
                 self.check_time()
 
 
@@ -256,8 +256,9 @@ class Hacker:
                         if type(target)== Hacker:
                             target.rig[0].damage_counter += target.rig[0].damage_value
                             self.trace_level += 1
-                            print(f'{target.name}\'s rig has been hit. Current damage = {target.rig[0].damage_counter}')
+                            print(f'{target.name}\'s rig has been hit. Current damage = {target.rig[0].damage_counter}\n')
                             if target.rig[0].damage_counter == 2:
+                                print(f'{target.name}\'s rig is broken. Scanning rig drive...\n')
                                 for item in reversed(target.rig[0].removable_drive):
                                     if item.get_encryption() is False:
                                         target.rig[0].removable_drive.remove(item)
