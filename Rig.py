@@ -22,8 +22,8 @@ class Rig:
         self.max_assets = max_assets
         self.time = time
         self.removable_drive = removable_drive
-        self.removable_drive.append(Asset.Asset('DataSpike','Used in battles'))
-        self.removable_drive.append(Asset.Asset('DataSpike','Used in battles'))
+        self.removable_drive.append(Asset.Asset('Data Spike','Used in battles'))
+        self.removable_drive.append(Asset.Asset('Data Spike','Used in battles'))
         if self.damage_counter == 0:
             self.condition = 'Pristine'
         elif 0 < self.damage_counter < 2:
