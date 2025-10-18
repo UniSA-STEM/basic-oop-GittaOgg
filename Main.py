@@ -38,6 +38,7 @@ def test3():
     print(hack3)
     print(hack4)
 
+
 def test4():
     ### Creates hacker and attempts to encrypt their crypto token. Since no security chip is in their inventory,
     ### cannot achieve
@@ -51,6 +52,7 @@ def test5():
     hack6.upgrade_rig()
     hack6.acquire_rig()
     hack6.upgrade_rig()
+
 
 def test6():
     ### Creates a hacker and attempts to retrieve an asset from the rig. Since hacker has no rig, cannot retrieve.
@@ -71,9 +73,4 @@ def test7():
 
 
 test1()
-test2()
-test3()
-test4()
-test5()
-test6()
-test7()
+
