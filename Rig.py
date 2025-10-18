@@ -1,6 +1,6 @@
 """
 File: Rig.py
-Description: <A brief description of this Python module.>
+Description: Module for the class Rig for the "Into the Grid" game.
 Author: Natasha Hunter
 ID: 110439590
 Username: hunny006
@@ -23,12 +23,7 @@ class Rig:
         self.removable_drive = []
         self.removable_drive.append(Asset.Asset('Data Spike','Used in battles'))
         self.removable_drive.append(Asset.Asset('Data Spike','Used in battles'))
-        if self.damage_counter == 0:
-            self.condition = 'Pristine'
-        elif 0 < self.damage_counter < 2:
-            self.condition = 'Damaged'
-        else:
-            self.condition = 'Broken'
+        self.condition = 'Pristine'
 
 
 
@@ -45,6 +40,17 @@ class Rig:
 
     def __eq__(self, other):
         return self.name == other.name
+
+    def get_condition(self):
+        self.time += 1
+        if self.damage_counter == 0:
+            self.condition = 'Pristine'
+        elif 0 < self.damage_counter < 2:
+            self.condition = 'Damaged'
+        else:
+            self.condition = 'Broken'
+        return self.condition
+
 
     def check_condition(self):
         self.time += 1
@@ -65,10 +71,6 @@ class Rig:
     def get_max_assets(self):
         self.time += 1
         return self.max_assets
-
-    def get_condition(self):
-        self.time += 1
-        return self.condition
 
     def get_damage_counter(self):
         self.time += 1
