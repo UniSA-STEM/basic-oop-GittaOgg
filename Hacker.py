@@ -25,7 +25,7 @@ class Hacker:
 
             inventory_str = inventory_str + f'{item.__str__()}\n'
 
-        if self.rig == []:
+        if not self.rig:
             rig_str = 'has no rig'
         else:
             rig_str = f'has a rig called {self.rig[0].get_name()}'
@@ -40,10 +40,10 @@ class Hacker:
 
 
     def acquire_rig(self):
-        if self.rig != []:
+        if self.rig:
             print(f'{self.name} already has a rig.')
         else:
-            if self.scan_inventory('Crypto Token') == False:
+            if not self.scan_inventory('Crypto Token'):
                 print('No Crypto Token found')
             else:
                 self.scan_inventory('Crypto Token')
@@ -53,13 +53,13 @@ class Hacker:
                 self.check_time()
 
     def repair_rig(self):
-        if self.rig == []:
+        if not self.rig:
             print('No rig found.')
         else:
             if self.rig[0].get_damage_counter()== 0:
                 print('No repair needed')
             else:
-                if self.scan_inventory('Crypto Token') == False:
+                if not self.scan_inventory('Crypto Token'):
                     print('No Crypto Tokens available to repair rig')
                 else:
                     self.scan_inventory('Crypto Token')
@@ -68,21 +68,19 @@ class Hacker:
             self.check_time()
 
     def upgrade_rig(self):
-        if self.rig == []:
+        if not self.rig:
             print('No rig found.')
         else:
             if self.rig[0].get_upgrade_level() == 3:
                 print('No further upgrades possible')
             else:
-                for item in self.inventory:
-                    if item.get_name() == 'Hardware Patch':
-                        self.scan_inventory('Hardware Patch')
-                        self.rig[0].upgrade()
-                        print(f'{self.rig[0].get_name()} has been upgraded.')
-                        break
-                else:
+                if not self.scan_inventory('Hardware Patch'):
                     print('No hardware patches found in inventory')
-                self.check_time()
+                else:
+                   self.scan_inventory('Hardware Patch')
+                   self.rig[0].upgrade()
+                   print(f'{self.rig[0].get_name()} has been upgraded.')
+            self.check_time()
 
     def check_inventory(self, asset):
         for item in self.inventory:
@@ -104,7 +102,7 @@ class Hacker:
         if self.trace_level >= 5:
             print(f'Trace level is at {self.trace_level}. Cannot transfer assets.')
         else:
-            if self.rig == []:
+            if not self.rig:
                 print('No rig found.')
             else:
                 storing = input('Enter type of asset to store, or enter "All" to store all assets: ')
@@ -138,7 +136,7 @@ class Hacker:
         if self.trace_level >= 5:
             print(f'Trace level is at {self.trace_level}. Cannot transfer assets.')
         else:
-            if self.rig== []:
+            if not self.rig:
                 print('No rig found.')
             else:
                 retrieving = input('Enter type of asset to retrieve, or enter "All" to retrieve all assets: ')
@@ -172,27 +170,26 @@ class Hacker:
                     to_encrypt = input('Enter the name of the asset to encrypt: ')
                     location = input('Enter the location of the asset- H for hacker inventory, R for rig drive: ')
                     if location == 'H':
-                        for item in self.inventory:
-                            if item.get_name() == to_encrypt and item.get_encryption() is False:
-                                item.encrypt()
+                        for asst in self.inventory:
+                            if asst.get_name() == to_encrypt and asst.get_encryption() is False:
+                                asst.encrypt()
                                 self.scan_inventory('Security Chip')
                                 self.trace_level += 1
-                                print(f'{item.get_name()} has been encrypted.')
+                                print(f'{asst.get_name()} has been encrypted.')
                                 break
                         else:
                             print(f'No decrypted {to_encrypt}\'s found in inventory.')
                         break
                     elif location == 'R':
-                        if self.rig == []:
+                        if not self.rig:
                             print('No rig found.')
                         else:
-
-                            for item in self.rig[0].removable_drive:
-                                if item.get_name() == to_encrypt and item.get_encryption() is False:
-                                    item.encrypt()
+                            for asst in self.rig[0].removable_drive:
+                                if asst.get_name() == to_encrypt and asst.get_encryption() is False:
+                                    asst.encrypt()
                                     self.scan_inventory('Security Chip')
                                     self.trace_level += 1
-                                    print(f'{item.get_name()} has been encrypted.')
+                                    print(f'{asst.get_name()} has been encrypted.')
                                     break
                             else:
                                 print(f'No decrypted {to_encrypt}\'s found in drive.')
@@ -210,12 +207,12 @@ class Hacker:
                     to_decrypt = input('Enter the name of the asset to decrypt: ')
                     location = input('Enter the location of the asset- H for hacker inventory, R for rig drive: ')
                     if location == 'H':
-                        for item in self.inventory:
-                            if item.get_name() == to_decrypt and item.get_encryption() is True:
-                                item.decrypt()
+                        for asst in self.inventory:
+                            if asst.get_name() == to_decrypt and asst.get_encryption() is True:
+                                asst.decrypt()
                                 self.scan_inventory('Security Chip')
                                 self.trace_level += 1
-                                print(f'{item.get_name()} has been decrypted.')
+                                print(f'{asst.get_name()} has been decrypted.')
                                 break
                         else:
                             print(f'No encrypted {to_decrypt}\'s found in inventory.')
@@ -241,12 +238,12 @@ class Hacker:
         if self.trace_level >= 5:
             print('Trace level too high. Cannot launch dataspike.')
         else:
-            if self.check_inventory('Data Spike') == False:
+            if not self.check_inventory('Data Spike'):
                 print('No data spike found in hacker inventory, checking rig')
-                if self.rig == []:
+                if not self.rig:
                     print('No rig found.')
                 else:
-                    if self.rig[0].check_drive('Data Spike') == False:
+                    if not self.rig[0].check_drive('Data Spike'):
                         print('No data spike found in rig drive- cannot launch')
                     else:
                         if type(target)== Hacker:
@@ -286,9 +283,3 @@ class Hacker:
                   f'{self.name}\'s inventory.')
             self.rig[0].time = 0
 
-hack1 = Hacker('hacker1')
-hack1.acquire_rig()
-hack1.inventory.append(Asset.Asset('Hardware Patch', 'test'))
-hack1.upgrade_rig()
-print(hack1.rig[0])
-print(hack1)
