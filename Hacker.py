@@ -28,7 +28,7 @@ class Hacker:
         if not self.rig:
             rig_str = 'has no rig'
         else:
-            rig_str = f'has a rig called {self.rig[0].get_name()}'
+            rig_str = f'has a rig called {self.rig[0].get_name()} which is in {self.rig[0].get_condition()} condition.'
 
         return (f'**********\nHacker\'s name is {self.name} and has a trace level of {self.trace_level}.'
                 f'\n{self.name} {rig_str}' 
@@ -51,6 +51,8 @@ class Hacker:
                 self.rig.append(Rig.Rig(name))
                 print(f'Rig {name} has been acquired')
                 self.check_time()
+
+
 
     def repair_rig(self):
         if not self.rig:
@@ -118,7 +120,8 @@ class Hacker:
                                 self.inventory.remove(item)
                                 self.rig[0].add_to_drive(item)
                                 self.trace_level += 1
-                                print(f'{item.get_name} has been moved')
+                                self.rig[0].time += 1
+                                print(f'{item.get_name()} has been moved')
 
                 else:
                     if self.rig[0].max_assets == len(self.rig[0].removable_drive):
@@ -130,6 +133,7 @@ class Hacker:
                                 self.rig[0].add_to_drive(item)
                                 print(f'{item.get_name()} has been stored in Rig\'s removable drive.')
                                 self.trace_level += 1
+                                self.rig[0].time += 1
                                 break
                             else:
                                 print(f'No decrypted {item.get_name()}\'s found in inventory.')
@@ -148,18 +152,21 @@ class Hacker:
                             self.rig[0].removable_drive.remove(item)
                             self.inventory.append(item)
                             self.trace_level += 1
+                            self.rig[0].time += 1
                             print(f'{item.get_name()} has been retrieved.')
+
                 else:
                     for item in self.rig[0].removable_drive:
                         if item.get_name() == retrieving and item.get_encryption() is False:
                             self.rig[0].removable_drive.remove(item)
                             self.inventory.append(item)
                             self.trace_level += 1
+                            self.rig[0].time += 1
                             print(f'{item.get_name()} has been retrieved.')
                             break
-                    else:
-                        print(f'No decrypted {item.get_name()}\'s found in drive.')
-            self.check_time()
+                        else:
+                            print(f'No decrypted {retrieving}\'s found in drive.')
+                self.check_time()
 
 
     def do_encryption(self, location, to_encrypt):
@@ -284,18 +291,3 @@ class Hacker:
             self.rig[0].time = 0
 
 
-
-hack1 = Hacker('hackname')
-hack1.inventory.append(Asset.Asset('Security Chip', 'test1'))
-hack1.inventory.append(Asset.Asset('Security Chip', 'test2'))
-hack1.inventory.append(Asset.Asset('Security Chip', 'test3'))
-hack1.inventory.append(Asset.Asset('Security Chip', 'test4'))
-hack1.inventory.append(Asset.Asset('Crypto Token', 'test1'))
-hack1.inventory.append(Asset.Asset('Crypto Token', 'test2'))
-hack1.inventory.append(Asset.Asset('Crypto Token', 'test3'))
-
-hack1.encrypt_asset()
-hack1.decrypt_asset()
-
-
-print(hack1)
