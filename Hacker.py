@@ -159,6 +159,7 @@ class Hacker:
                             break
                     else:
                         print(f'No decrypted {item.get_name()}\'s found in drive.')
+            self.check_time()
 
 
 
@@ -249,7 +250,7 @@ class Hacker:
                         print('No data spike found in rig drive- cannot launch')
                     else:
                         if type(target)== Hacker:
-                            target.rig[0].damage_counter -= target.rig[0].damage_value
+                            target.rig[0].damage_counter += target.rig[0].damage_value
                             self.trace_level += 1
                             print(f'{target.name}\'s rig has been hit. Current damage = {target.rig[0].damage_counter}')
                             if target.rig[0].damage_counter == 2:
@@ -258,13 +259,11 @@ class Hacker:
                                         target.rig[0].removable_drive.remove(item)
                                         self.inventory.append(item)
                                         print(f'{item.get_name()} has been acquired.')
-                                else:
-                                    print(f'{target.name}\'s rig has no decrypted assets to acquire.')
                         else:
                             print(f'Cannot find rig.')
             else:
                 if type(target)== Hacker:
-                    target.rig[0].damage_counter -= target.rig[0].damage_value
+                    target.rig[0].damage_counter += target.rig[0].damage_value
                     self.trace_level += 1
                     print(f'{target.name}\'s rig has been hit. Current damage = {target.rig[0].damage_counter}')
                     if target.rig[0].damage_counter == 2:
@@ -273,8 +272,6 @@ class Hacker:
                                 target.rig[0].removable_drive.remove(item)
                                 self.inventory.append(item)
                                 print(f'{item.get_name()} has been acquired.')
-                        else:
-                            print(f'{target.name}\'s rig has no decrypted assets to acquire.')
                 else:
                     print('Cannot find rig.')
 
@@ -282,17 +279,16 @@ class Hacker:
 
 
     def check_time(self):
-        if self.rig[0].time >= 5:
+        if self.rig[0].time >= 2:
             new_asset = self.rig[0].generate_asset()
             self.inventory.append(new_asset)
-            print(f'{self.rig[0].get_name()} has generated a {new_asset.description} and added to '
+            print(f'{self.rig[0].get_name()} has generated a {new_asset.name} and added to '
                   f'{self.name}\'s inventory.')
             self.rig[0].time = 0
 
 hack1 = Hacker('hacker1')
 hack1.acquire_rig()
-
-hack2 = Hacker('hacker2')
-hack2.acquire_rig()
-
-hack1.launch_dataspike(hack2)
+hack1.inventory.append(Asset.Asset('Hardware Patch', 'test'))
+hack1.upgrade_rig()
+print(hack1.rig[0])
+print(hack1)
