@@ -1,6 +1,6 @@
 """
 File: Asset.py
-Description: <A brief description of this Python module.>
+Description: Module for the class Asset for the "Into the Grid" game.
 Author: Natasha Hunter
 ID: 110439590
 Username: hunny006
@@ -43,7 +43,6 @@ class Asset():
     def get_description(self):
         return self.description
 
-    def get_encryption(self):
-        return self.encrypted
+
 
 
