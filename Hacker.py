@@ -178,6 +178,48 @@ class Hacker:
                         print(f'No decrypted {item.get_name()}\'s found in drive.')
 
 
+
+    def encrypt_asset(self):
+        if self.trace_level >= 5:
+            print(f'Trace level is at {self.trace_level}. Cannot encrypt assets.')
+        else:
+            for item in self.inventory:
+                if item.get_name() == 'Security Chip':
+                    to_encrypt = input('Enter the name of the asset to encrypt: ')
+                    location = input('Enter the location of the asset- H for hacker inventory, R for rig drive: ')
+                    if location == 'H':
+
+                        for item in self.inventory:
+                            if item.get_name() == to_encrypt and item.get_encryption() is False:
+                                item.encrypt()
+                                self.scan_inventory('Security Chip')
+                                self.trace_level += 1
+                                print(f'{item.get_name()} has been encrypted.')
+                                break
+                        else:
+                            print(f'No decrypted {to_encrypt}\'s found in inventory.')
+                        break
+                    elif location == 'R':
+                        if self.rig == []:
+                            print('No rig found.')
+                        else:
+
+                            for item in self.rig[0].removable_drive:
+                                if item.get_name() == to_encrypt and item.get_encryption() is False:
+                                    item.encrypt()
+                                    self.scan_inventory('Security Chip')
+                                    self.trace_level += 1
+                                    print(f'{item.get_name()} has been encrypted.')
+                                    break
+                            else:
+                                print(f'No decrypted {to_encrypt}\'s found in drive.')
+            else:
+                print('No available security chips found.')
+
+
+
+
+
     def check_time(self):
         if self.rig[0].time >= 5:
             new_asset = self.rig[0].generate_asset()
@@ -189,6 +231,6 @@ class Hacker:
 
 hack1= Hacker('hackman')
 hack1.acquire_rig()
+hack1.inventory.append(Asset.Asset('Security Chip', 'testing'))
+hack1.encrypt_asset()
 print(hack1.rig[0])
-hack1.retrieve_asset()
-print(hack1)
