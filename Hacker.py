@@ -1,6 +1,6 @@
 """
 File: Hacker.py
-Description: <A brief description of this Python module.>
+Description: Module for the class Hacker for the "Into the Grid" game.
 Author: Natasha Hunter
 ID: 110439590
 Username: hunny006
@@ -82,12 +82,6 @@ class Hacker:
                    print(f'{self.rig[0].get_name()} has been upgraded.')
             self.check_time()
 
-    def check_inventory(self, asset):
-        for item in self.inventory:
-            if item.get_name() == asset:
-                return True
-        else:
-            return False
 
     def scan_inventory(self, asset):
         for item in self.inventory:
@@ -160,43 +154,43 @@ class Hacker:
             self.check_time()
 
 
+    def do_encryption(self, location, to_encrypt):
+        if location == 'H':
+            check = self.inventory
+        else:
+            check = self.rig[0].removable_drive
+        for asst in check:
+            if asst.get_name() == to_encrypt and asst.get_encryption() is False:
+                asst.encrypt()
+                self.scan_inventory('Security Chip')
+                self.trace_level += 1
+                print(f'{asst.get_name()} has been encrypted.')
+                break
+        else:
+            print(f'No decrypted {to_encrypt}\'s found in inventory.')
+
 
     def encrypt_asset(self):
         if self.trace_level >= 5:
             print(f'Trace level is at {self.trace_level}. Cannot encrypt assets.')
         else:
-            for item in self.inventory:
-                if item.get_name() == 'Security Chip':
-                    to_encrypt = input('Enter the name of the asset to encrypt: ')
-                    location = input('Enter the location of the asset- H for hacker inventory, R for rig drive: ')
-                    if location == 'H':
-                        for asst in self.inventory:
-                            if asst.get_name() == to_encrypt and asst.get_encryption() is False:
-                                asst.encrypt()
-                                self.scan_inventory('Security Chip')
-                                self.trace_level += 1
-                                print(f'{asst.get_name()} has been encrypted.')
-                                break
-                        else:
-                            print(f'No decrypted {to_encrypt}\'s found in inventory.')
-                        break
-                    elif location == 'R':
-                        if not self.rig:
-                            print('No rig found.')
-                        else:
-                            for asst in self.rig[0].removable_drive:
-                                if asst.get_name() == to_encrypt and asst.get_encryption() is False:
-                                    asst.encrypt()
-                                    self.scan_inventory('Security Chip')
-                                    self.trace_level += 1
-                                    print(f'{asst.get_name()} has been encrypted.')
-                                    break
-                            else:
-                                print(f'No decrypted {to_encrypt}\'s found in drive.')
-                    else:
-                        print('Location not found.')
+            if not self.scan_inventory('Security Chip'):
+                print('No Security Chip found.')
             else:
-                print('No available security chips found.')
+                to_encrypt = input('Enter the name of the asset to encrypt: ')
+                location = input('Enter the location of the asset- H for hacker inventory, R for rig drive: ')
+                if location == 'H':
+                    self.do_encryption(location, to_encrypt)
+                elif location == 'R':
+                    if not self.rig:
+                        print('No rig found.')
+                    else:
+                        self.do_encryption(location, to_encrypt)
+                else:
+                    print('Location not found.')
+
+
+
 
     def decrypt_asset(self):
         if self.trace_level >= 5:
@@ -238,7 +232,7 @@ class Hacker:
         if self.trace_level >= 5:
             print('Trace level too high. Cannot launch dataspike.')
         else:
-            if not self.check_inventory('Data Spike'):
+            if not self.scan_inventory('Data Spike'):
                 print('No data spike found in hacker inventory, checking rig')
                 if not self.rig:
                     print('No rig found.')
@@ -283,3 +277,13 @@ class Hacker:
                   f'{self.name}\'s inventory.')
             self.rig[0].time = 0
 
+
+
+hack1 = Hacker('hackname')
+hack1.inventory.append(Asset.Asset('Security Chip', 'test'))
+hack2 = Hacker('hackname2')
+hack2.inventory.append(Asset.Asset('Security Chip', 'test'))
+hack1.encrypt_asset()
+hack2.encrypt_asset2()
+print(hack1)
+print(hack2)
