@@ -147,9 +147,8 @@ class Rig:
         for item in self.removable_drive:
             if item.get_name() == asset:
                 return True
-            else:
-                return False
-        return None
+        else:
+            return False
 
     def scan_drive(self, asset):
         self.time += 1
@@ -157,6 +156,5 @@ class Rig:
             if item.get_name() == asset:
                 self.removable_drive.remove(item)
                 return True
-            else:
-                return False
-        return None
+        else:
+            return False
