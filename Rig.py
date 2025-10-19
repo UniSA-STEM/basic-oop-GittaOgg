@@ -7,11 +7,59 @@ Username: hunny006
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
 import random
-
 import Asset
 
 
 class Rig:
+
+    """
+    A class which represents rigs in the game.
+
+    Attributes
+    ------------
+    name: str
+        name of the rig
+    damage_counter: int
+        amount of damage taken by rig
+    damage_value: float
+        damage done with every hit to rig
+    upgrade_level: int
+        how many upgrades the rig has had
+    max_assets: int
+        maximum number of assets able to be stored in rig's drive
+    time: int
+        rig's internal clock
+    removable_drive: list
+        storage for the rig to hold assets
+    condition: str
+        string representation of damage_count
+
+    Methods
+    -------
+
+    get_name:
+        returns the name of the rig
+    get_condition:
+        returns condition of the rig
+    get_upgrade_level:
+        returns the number of upgrades the rig has had
+    get_damage_counter:
+        returns the amount of damage taken by rig
+    add_to_drive(asset):
+        adds assets to the rig's drive
+    remove_from_drive(asset):
+        removes assets from the rig's drive
+    repair:
+        repairs rig to pristine condition
+    upgrade:
+        upgrades rig 1 level
+    generate_asset:
+        generates a new asset
+    check_drive(asset):
+        checks the rig's removable for asset
+    scan_drive(asset):
+        checks the rig's removable for asset and removes if found
+    """
 
     def __init__(self, name):
         self.damage_counter = 0
@@ -42,6 +90,7 @@ class Rig:
         return self.name == other.name
 
     def get_condition(self):
+        """ Sets string representation of damage_counter as condition, increases rig's timer """
         self.time += 1
         if self.damage_counter == 0:
             self.condition = 'Pristine'
@@ -51,73 +100,48 @@ class Rig:
             self.condition = 'Broken'
         return self.condition
 
-
-    def check_condition(self):
-        self.time += 1
-        return f'{self.condition} ({self.damage_counter})'
-
     def get_name(self):
+        """ Returns the name of the rig, increases rig's timer  """
         self.time += 1
         return self.name
 
     def get_upgrade_level(self):
+        """ Returns the number of upgrades the rig has had, increases rig's timer """
         self.time += 1
         return self.upgrade_level
 
-    def get_damage_value(self):
-        self.time += 1
-        return self.damage_value
-
-    def get_max_assets(self):
-        self.time += 1
-        return self.max_assets
-
     def get_damage_counter(self):
+        """ Returns the amount of damage taken by rig, increases rig's timer """
         self.time += 1
         return self.damage_counter
 
-    def get_removable_drive(self):
-        self.time += 1
-        return self.removable_drive
-
     def add_to_drive(self, asset):
+        """ Adds assets to the rig's drive, if there is space. Increases rig's timer """
         self.time += 1
         if len(self.removable_drive)  >= self.max_assets:
             print('Rig has full removable drive')
         else:
             self.removable_drive.append(asset)
 
-    def remove_from_drive(self):
+    def remove_from_drive(self, asset):
+        """Removes assets from the rig's drive. Increases rig's timer """
         self.time += 1
-        removing = input('Enter name of asset to retrieve, or enter "All" to retrieve all assets: ')
-        if removing == 'All':
-            removal_list = []
-            for item in reversed(self.removable_drive):
-                if item.get_encryption()==False:
-                    self.removable_drive.remove(item)
-                    removal_list.append(item)
-                    print(removal_list)
-                return removal_list
-        else:
-            for item in self.removable_drive:
-                if item.get_name() == removing:
-                    self.removable_drive.remove(item)
-                    return removing
-            else:
-                print(f'There are no {removing}s in rig\'s removable drive')
+        self.removable_drive.remove(asset)
 
 
     def repair(self):
+        """ Repairs rig to pristine condition, if the rig has any damage. Increases rig's timer """
         if self.damage_counter == 0:
             print('No repair needed')
         else:
             self.time += 1
             self.damage_counter = 0
             self.condition = 'Pristine'
-            return f'{self.name} has been repaired to {self.condition}'
+
 
 
     def upgrade(self):
+        """ Upgrades rig 1 level and increases rig's timer """
         if self.upgrade_level >= 3:
             print('unable to upgrade further.')
         else:
@@ -127,6 +151,7 @@ class Rig:
             self.upgrade_level += 1
 
     def generate_asset(self):
+        """Generates a new asset """
         acceptable = ['Crypto Token','Hardware Patch','Security Chip','Data Spike']
         item = acceptable[random.randint(0,3)]
         if item == 'Crypto Token':
@@ -144,6 +169,7 @@ class Rig:
         return new
 
     def check_drive(self, asset):
+        """Checks the rig's removable drive for asset, increases rig's timer """
         self.time += 1
         for item in self.removable_drive:
             if item.get_name() == asset:
@@ -152,6 +178,7 @@ class Rig:
             return False
 
     def scan_drive(self, asset):
+        """Checks the rig's removable drive for asset. Removes asset if found. increases rig's timer """
         self.time += 1
         for item in self.removable_drive:
             if item.get_name() == asset:
