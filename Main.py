@@ -8,8 +8,7 @@ This is my own work as defined by the University's Academic Misconduct Policy.
 """
 
 import Hacker
-import Rig
-import Asset
+
 
 def test1():
     ### Creates a hacker, acquires a rig, retrieves asset(s) from rig to hacker inventory.
@@ -17,6 +16,7 @@ def test1():
     hack1 = Hacker.Hacker('HackMan')
     hack1.acquire_rig()
     hack1.retrieve_asset()
+    print(hack1)
     # either retrieve All to take 2 data spikes, or choose single data spike to transfer
 
 
@@ -68,9 +68,11 @@ def test7():
     hack8 = Hacker.Hacker('HackySack')
     hack8.acquire_rig()
     hack8.retrieve_asset()
+    print(hack8)
     hack8.store_asset()
     hack8.retrieve_asset()
 
 
-test7()
+
+test3()
 

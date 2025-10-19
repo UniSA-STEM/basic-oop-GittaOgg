@@ -90,7 +90,7 @@ class Rig:
         return self.name == other.name
 
     def get_condition(self):
-        """ Sets string representation of damage_counter as condition, increases rig's timer """
+        """ Sets string representation of damage_counter as condition, returns condition, increases rig's timer """
         self.time += 1
         if self.damage_counter == 0:
             self.condition = 'Pristine'
@@ -116,7 +116,13 @@ class Rig:
         return self.damage_counter
 
     def add_to_drive(self, asset):
-        """ Adds assets to the rig's drive, if there is space. Increases rig's timer """
+        """
+        Adds assets to the rig's drive, if there is space. Increases rig's timer
+
+        Parameters:
+            asset (string): name of the asset to add to the rig's drive
+
+        """
         self.time += 1
         if len(self.removable_drive)  >= self.max_assets:
             print('Rig has full removable drive')
@@ -124,7 +130,12 @@ class Rig:
             self.removable_drive.append(asset)
 
     def remove_from_drive(self, asset):
-        """Removes assets from the rig's drive. Increases rig's timer """
+        """
+        Removes assets from the rig's drive. Increases rig's timer
+
+        Parameters:
+             asset(string): asset to be removed from rig's drive
+        """
         self.time += 1
         self.removable_drive.remove(asset)
 
@@ -169,7 +180,13 @@ class Rig:
         return new
 
     def check_drive(self, asset):
-        """Checks the rig's removable drive for asset, increases rig's timer """
+        """
+        Checks the rig's removable drive for asset, increases rig's timer
+
+        Parameters:
+            asset (string): name of the asset to check for
+
+        """
         self.time += 1
         for item in self.removable_drive:
             if item.get_name() == asset:
@@ -178,7 +195,13 @@ class Rig:
             return False
 
     def scan_drive(self, asset):
-        """Checks the rig's removable drive for asset. Removes asset if found. increases rig's timer """
+        """
+        Checks the rig's removable drive for asset. Removes asset if found. increases rig's timer
+
+        Parameters:
+            asset (string): name of the asset to check for
+
+        """
         self.time += 1
         for item in self.removable_drive:
             if item.get_name() == asset:
