@@ -4,6 +4,7 @@ Description: Module for the class Asset for the "Into the Grid" game.
 Author: Natasha Hunter
 ID: 110439590
 Username: hunny006
+Git Repository: https://github.com/UniSA-STEM/basic-oop-GittaOgg
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
 
@@ -43,7 +44,7 @@ class Asset():
         self.encrypted = encrypted
 
     def __str__(self):
-        if self.encrypted==True:
+        if self.encrypted:
             return f'**********\n<{self.name}>: <{self.description}> [Encrypted]\n'
         else:
             return f'**********\n<{self.name}>: <{self.description}>\n'

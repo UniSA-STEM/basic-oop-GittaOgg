@@ -4,6 +4,7 @@ Description: Module for the class Rig for the "Into the Grid" game.
 Author: Natasha Hunter
 ID: 110439590
 Username: hunny006
+Git Repository: https://github.com/UniSA-STEM/basic-oop-GittaOgg
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
 import random
