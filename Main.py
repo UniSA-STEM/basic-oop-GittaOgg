@@ -53,12 +53,12 @@ def test3():
 
 
 def test4():
-    print('****TEST 4**** \n')
     """
     Creates hacker and attempts to encrypt an asset. Since hacker has no security chip, cannot be done.
     Adds security chip to hacker's inventory.
     Encrypts asset
     """
+    print('****TEST 4**** \n')
     hack5 = Hacker.Hacker('HackSkellington')
     hack5.encrypt_asset()
     hack5.inventory.append(Asset.Asset('Security Chip', 'used for encrypting and decrypting'))
